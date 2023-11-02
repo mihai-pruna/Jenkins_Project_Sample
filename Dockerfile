@@ -1,5 +1,10 @@
-FROM ubuntu:16.04
-RUN apt-get update && apt-get install -y python python-pip
-RUN pip install flask
-COPY app.py /opt/
-ENTRYPOINT FLASK_APP=/opt/app.py flask run --host=0.0.0.0 --port=8080
+FROM node:16
+WORKDIR /usr/src/app
+
+COPY package*.json ./
+
+RUN npm install
+RUN npm ci --only=production
+COPY . .
+EXPOSE 3000
+CMD [ "node", "index.js" ]
