@@ -1,48 +1,30 @@
 pipeline {
-    environment {
-        dockerRepo = "praslea/webapp"
-        registryCredential = 'dockerhub-credentials'
-    }
+   agent any
 
-    agent any
+   environment {
+       // Please update your own registry here
+       REGISTRY = 'https://hub.docker.com/'
+       REGISTRY_IMAGE = "$REGISTRY/praslea/webapp"
+       DOCKERFILE_PATH = 'Dockerfile'
 
-    stages {
-        //Getting the source code and a Dockerfile
-        stage('Getting Source Code From GitHub') {
-            steps {
-                checkout([
-                 $class: 'GitSCM',
-                 branches: [[name: 'master']],
-                 userRemoteConfigs: [[
-                    url: 'https://github.com/mihai-pruna/Jenkins_Project_Sample.git',
-                    credentialsId: 'github-pat'
-                 ]]
-                ])
-            }
-        }
+       REGISTRY_USER = credentials('registryUser')
+       REGISTRY_PASSWORD = credentials('registryPassword')
 
-        //Building image using the Dockerfile in the source code above
-        //env.BUILD_ID tags the image with a unique build number
-        stage("Building docker image"){
-            steps{
-                script{
-                        dockerImage = docker.build dockerRepo + ":${env.BUILD_ID}"
+       CURRENT_BUILD_NUMBER = "${currentBuild.number}"
+       GIT_COMMIT_SHORT = sh(returnStdout: true, script: "git rev-parse --short ${GIT_COMMIT}").trim()
+   }
 
-                }
-            }
-        }
-
-        //Pushing the image built in the previous step to DockerHub
-        stage('Push Image') {
-            steps{
-                script {
-                    docker.withRegistry( '', registryCredential ) {
-                    dockerImage.push("latest")
-                    dockerImage.push("${env.BUILD_ID}")
-                    }   
-                }
-            }
-        }
-
-    }
+   stages {
+       stage('Build') {
+           steps {
+               sh 'docker build -t $REGISTRY_IMAGE:$GIT_COMMIT_SHORT-jenkins-$CURRENT_BUILD_NUMBER -f $DOCKERFILE_PATH .'
+           }
+       }
+       stage('Push') {
+           steps {
+               sh 'docker login -u $REGISTRY_USER -p $REGISTRY_PASSWORD $REGISTRY'
+               sh 'docker push $REGISTRY_IMAGE:$GIT_COMMIT_SHORT-jenkins-$CURRENT_BUILD_NUMBER'
+           }
+       }
+   }
 }
