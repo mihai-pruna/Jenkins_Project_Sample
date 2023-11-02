@@ -1,7 +1,7 @@
 pipeline {
     environment {
-        dockerRepo = "<dockerhub-username>/<repo-name>"
-        registryCredential = '<dockerhub-credential-name>'
+        dockerRepo = "praslea/webapp"
+        registryCredential = 'dockerhub-credentials'
     }
 
     agent any
@@ -14,8 +14,8 @@ pipeline {
                  $class: 'GitSCM',
                  branches: [[name: 'master']],
                  userRemoteConfigs: [[
-                    url: 'https://github.com/*****.git',
-                    credentialsId: 'github-key'
+                    url: 'https://github.com/mihai-pruna/Jenkins_Project_Sample.git',
+                    credentialsId: 'github-pat'
                  ]]
                 ])
             }
