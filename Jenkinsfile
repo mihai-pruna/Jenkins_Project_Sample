@@ -3,7 +3,7 @@ pipeline {
 
    environment {
        // Please update your own registry here
-       REGISTRY = 'hub.docker.com'
+       REGISTRY = registry.hub.docker.com'
        REGISTRY_IMAGE = "$REGISTRY/praslea/webapp"
        DOCKERFILE_PATH = 'Dockerfile'
 
