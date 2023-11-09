@@ -1,6 +1,6 @@
 pipeline {
    // agent any
-   agent master
+   agent { master }
 
    environment {
        // Please update your own registry here
