@@ -1,6 +1,6 @@
 pipeline {
-   agent any
-   // agent  { label 'master' }
+   // agent any
+   agent  { label 'slave_node3' }
 
    environment {
        // Please update your own registry here
