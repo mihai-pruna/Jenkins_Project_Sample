@@ -7,7 +7,7 @@ pipeline {
        REGISTRY = 'registry.hub.docker.com'
        REGISTRY_IMAGE = "$REGISTRY/dorinlungu/webapp"
        DOCKERFILE_PATH = 'Dockerfile'
-       docker = '/usr/local/bin/docker'
+       // docker = '/usr/local/bin/docker'
 
        REGISTRY_USER = credentials('registryUser')
        REGISTRY_PASSWORD = credentials('registryPassword')
