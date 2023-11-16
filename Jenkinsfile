@@ -9,8 +9,8 @@ pipeline {
        DOCKERFILE_PATH = 'Dockerfile'
        docker = '/usr/local/bin/docker'
 
-       REGISTRY_USER = credentials('dorinlungu')
-       REGISTRY_PASSWORD = credentials('Dorin250037')
+       REGISTRY_USER = credentials('registryUser')
+       REGISTRY_PASSWORD = credentials('registryPassword')
 
        CURRENT_BUILD_NUMBER = "${currentBuild.number}"
        GIT_COMMIT_SHORT = sh(returnStdout: true, script: "git rev-parse --short ${GIT_COMMIT}").trim()
