@@ -1,6 +1,6 @@
 pipeline {
    // agent any
-   agent  { label 'jenkins_slave_3' }
+   agent  { label 'jenkins_node' }
 
    environment {
        // Please update your own registry here
